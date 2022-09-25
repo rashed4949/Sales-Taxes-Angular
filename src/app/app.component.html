@@ -1,4 +1,4 @@
-<div class="section-title wow fadeInUp" data-wow-delay="0.4s">
+<div class="section-title wow fadeInUp">
   <h3 style="text-align: center; margin-top: 20px">SALES TAXES APPLICATION</h3>
 </div>
 <div class="row">
@@ -11,7 +11,32 @@
         data-stellar-background-ratio="3"
       >
         <div class="container">
-          <div class="wow fadeInUp" data-wow-delay="0.8s">
+          <div class="wow fadeInUp">
+            <div class="row">
+              <div class="col">
+                <label for="select">Category</label>
+                <select
+                  formControlName="category"
+                  class="form-control"
+                  [ngClass]="{
+                    'is-invalid': submitted && f['category'].errors
+                  }"
+                >
+                  <option>All Goods</option>
+                  <option>Books</option>
+                  <option>Food</option>
+                  <option>Medical Products</option>
+                </select>
+                <div
+                  *ngIf="submitted && f['category'].errors"
+                  class="invalid-feedback"
+                >
+                  <div *ngIf="f['category'].errors['required']">
+                    Category is required
+                  </div>
+                </div>
+              </div>
+            </div>
             <div class="row">
               <div class="col">
                 <label for="name">Product</label>
@@ -47,6 +72,9 @@
                   id="quantity"
                   #quantity
                   name="quantity"
+                  min="1"
+                  step="1"
+                  onkeypress="return event.charCode >= 48 && event.charCode <= 57"
                   [ngClass]="{
                     'is-invalid': submitted && f['quantity'].errors
                   }"
@@ -70,9 +98,6 @@
                     id="imported"
                     #imported
                     name="imported"
-                    [ngClass]="{
-                      'is-invalid': submitted && f['imported'].errors
-                    }"
                     class="form-check-input"
                     type="checkbox"
                     role="switch"
@@ -96,6 +121,9 @@
                   class="form-control"
                   id="price"
                   name="price"
+                  step="0.01"
+                  value="0.00"
+                  placeholder="0.00"
                   [ngClass]="{ 'is-invalid': submitted && f['price'].errors }"
                 />
                 <div
@@ -114,7 +142,7 @@
               <div class="col">
                 <button
                   type="submit"
-                  (click)="saveNewsPortalInfo()"
+                  (click)="addItemsShoppingBasket()"
                   class="form-control"
                   id="cf-submit"
                   name="submit"
@@ -136,17 +164,40 @@
       data-stellar-background-ratio="3"
     >
       <div class="container">
-        <div class="section-title wow fadeInUp" data-wow-delay="0.2s">
+        <div class="section-title wow fadeInUp">
           <h6>Preview</h6>
         </div>
-        <div class="wow fadeInUp" data-wow-delay="0.8s">
-          <div class="card" style="width: 30rem; height: 30rem">
-            <p style="text-align: center">Receipt Details Shopping Baskets</p>
+        <div class="wow fadeInUp">
+          <div
+            class="card scroll"
+            style="width: 30rem; height: 30rem; overflow-y: auto"
+          >
+            <h6 style="text-align: center">
+              <ins>Shopping Basket Receipt</ins>
+            </h6>
             <div class="card-body">
-              <!-- <h5 class="card-title">{{productName.value}}</h5> -->
+              <h6 *ngIf="shoppingBaskets.length > 0">Before Taxes</h6>
               <ul>
-                <li>
-                  {{ productName.value }} {{ quantity.value }} {{ price.value }}
+                <li *ngFor="let c of shoppingBaskets">
+                  {{ c.quantity }} {{ c.productName }} at
+                  {{ c.price | number: "1.2-2":"" }}
+                </li>
+              </ul>
+              <h6 *ngIf="afterAddedTaxList.length">After Taxes</h6>
+              <ul>
+                <li *ngFor="let c of afterAddedTaxList">
+                  {{ c.quantity }} {{ c.productName }} at
+                  {{ c.price | number: "1.2-2":"" }}
+                </li>
+              </ul>
+              <ul>
+                <li *ngIf="submitted">
+                  Sales Taxes=
+                  {{ totalSalesTax | number: "1.2-2":"" }}
+                </li>
+                <li *ngIf="submitted">
+                  Total Amount=
+                  {{ totalAmount | number: "1.2-2":"" }}
                 </li>
               </ul>
             </div>
@@ -157,19 +208,18 @@
             <div class="col" style="padding-top: 5px">
               <button
                 type="submit"
-                (click)="saveNewsPortalInfo()"
+                (click)="taxCalculation()"
                 class="form-control"
                 id="cf-submit"
                 name="submit"
               >
-                Add
+                Total
               </button>
             </div>
 
             <div class="col" style="margin-right: 52px; padding-top: 5px">
               <button
                 type="submit"
-                (click)="saveNewsPortalInfo()"
                 class="form-control"
                 id="cf-submit"
                 name="submit"
