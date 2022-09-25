@@ -3,6 +3,6 @@ export class ShoppingBasket{
     quantity:number;
     imported:boolean;
     price:number;
-    description:string;
+    category:string;
 
 }
