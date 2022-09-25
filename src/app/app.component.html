@@ -163,10 +163,8 @@
       id="appointment"
       data-stellar-background-ratio="3"
     >
-      <div class="container">
-        <div class="section-title wow fadeInUp">
-          <h6>Preview</h6>
-        </div>
+      <div class="container" id="printable">
+        <div class="section-title wow fadeInUp"></div>
         <div class="wow fadeInUp">
           <div
             class="card scroll"
@@ -179,14 +177,16 @@
               <h6 *ngIf="shoppingBaskets.length > 0">Before Taxes</h6>
               <ul>
                 <li *ngFor="let c of shoppingBaskets">
-                  {{ c.quantity }} {{ c.productName }} at
+                  {{ c.quantity }} {{ c.imported ? "Imported" : "" }}
+                  {{ c.productName }} at
                   {{ c.price | number: "1.2-2":"" }}
                 </li>
               </ul>
               <h6 *ngIf="afterAddedTaxList.length">After Taxes</h6>
               <ul>
                 <li *ngFor="let c of afterAddedTaxList">
-                  {{ c.quantity }} {{ c.productName }} at
+                  {{ c.quantity }}{{ c.imported ? "Imported" : "" }}
+                  {{ c.productName }} at
                   {{ c.price | number: "1.2-2":"" }}
                 </li>
               </ul>
@@ -223,8 +223,9 @@
                 class="form-control"
                 id="cf-submit"
                 name="submit"
+                (click)="printReceipt()"
               >
-                Add
+                Print
               </button>
             </div>
           </div>

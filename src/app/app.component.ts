@@ -53,40 +53,51 @@ this.prepareShoppingBasketForm(null);
   }
 
 
-  TotalShoppingBasket(){
 
-  }
-  salesTaxesTenPercent:number;
-  additionalSalesTax:number;
-  salesAndAdditionalTax:number;
-  totalSalesTax:number;
-  totalAmount:number;
+  salesTaxesTenPercent:number=0;
+  additionalSalesTax:number=0;
+  salesAndAdditionalTax:number=0;
+  totalSalesTax:number=0;
+  totalAmount:number=0;
   taxCalculation(){
     this.submitted=true;
+    this.afterAddedTaxList=[];
     const myClonedArray = cloneDeep(this.shoppingBaskets); 
-    this.afterAddedTaxList=myClonedArray.map(c=>{
+    myClonedArray.map(c=>{
       if(c.category==="All Goods" && c.imported==true){
         this.salesAndAdditionalTax=((c.price*15)/100);
-      c.price+=this.salesAndAdditionalTax;
+        this.salesAndAdditionalTax=+(Math.ceil(this.salesAndAdditionalTax*20)/20).toFixed(2);
+      c.price+=+this.salesAndAdditionalTax;
+     
       }
       else if(c.category==="All Goods"){
       this.salesTaxesTenPercent=((c.price*10)/100);
-      c.price+=this.salesTaxesTenPercent;
+      this.salesTaxesTenPercent=+(Math.ceil(this.salesTaxesTenPercent*20)/20).toFixed(2);
+      c.price+=+this.salesTaxesTenPercent;
      }
      else if(c.imported==true){
       this.additionalSalesTax=((c.price*5)/100);
-      c.price+=this.additionalSalesTax;
+      this.additionalSalesTax=+(Math.ceil(this.additionalSalesTax*20)/20).toFixed(2);
+      c.price+=+this.additionalSalesTax;
      }
-      return c;
+
+     this.afterAddedTaxList.push(c);
+     this.TotalSalesTaxAndAmount()
    });
-this.totalSalesTax=this.additionalSalesTax+this.salesTaxesTenPercent+this.salesAndAdditionalTax;
-   this.afterAddedTaxList.map(c=>{
-    this.totalAmount+=c.price;
-   });
+
+  }
+  TotalSalesTaxAndAmount(){
+    this.totalAmount=0;
+    this.afterAddedTaxList.map(c=>{
+      this.totalAmount=this.totalAmount+ +c.price;
+
+      this.totalSalesTax=(+this.additionalSalesTax+ +this.salesTaxesTenPercent+ +this.salesAndAdditionalTax);
+     });
   }
 
-  myFunction() {
-      alert("You are successfully inserted data.");
+
+  printReceipt(){
+    window.print();
   }
 
   back() {
