@@ -28,6 +28,10 @@ yarn-error.log
 !.vscode/extensions.json
 .history/*
 
+# e2e
+/e2e/*.js
+/e2e/*.map
+
 # Miscellaneous
 /.angular/cache
 .sass-cache/
@@ -43,3 +47,4 @@ Thumbs.db
 
 #firebase
 firebase/
+.firebaserc
