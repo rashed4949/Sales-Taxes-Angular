@@ -1,12 +1,9 @@
-/* You can add global styles to this file, and also import other style files */
 @import '~bootstrap/dist/css/bootstrap.min.css'; 
 
 @media print {
     body * {
       visibility:hidden;
     }
-
-    
     #printable, #printable * {
       visibility:visible;
     }
@@ -14,5 +11,10 @@
       position:absolute;
       left:0;
       top:0;
+    }
+    
+      #removeButton {
+        display :  none !important;
+    
     }
   }
